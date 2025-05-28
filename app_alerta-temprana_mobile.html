@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta Temprana de Inundaciones</title>
+    <style>
+        :root {
+            --primary: #0077b6;
+            --primary-dark: #005a8d;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --color-terreno: #d2b48c;
+            --color-plataforma: #c4a484;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f9fc;
+        }
+        
+        .control-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        
+        .checkbox-group {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+        }
+        
+        #mapa {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            background: #dff6fd;
+            border: 1px solid #b2ebf2;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        .cauce {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 68px;
+            background: #4a89c3;
+            z-index: 1;
+        }
+        
+        .terreno {
+            position: absolute;
+            bottom: 68px;
+            width: 100%;
+            height: calc(100% - 68px);
+            background: var(--color-terreno);
+            z-index: 2;
+        }
+        
+        .limite-desborde {
+            position: absolute;
+            left: 0;
+            right: 30px;
+            height: 3px;
+            background-color: var(--danger);
+            z-index: 5;
+            box-shadow: 0 0 0 2px white;
+        }
+        
+        .plataforma {
+            position: absolute;
+            background: var(--color-plataforma);
+            z-index: 3;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .agua {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(79, 195, 247, 0.6);
+            transition: height 0.5s ease;
+            z-index: 4;
+        }
+        
+        .regla {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            border-left: 1px dashed #ccc;
+            z-index: 6;
+        }
+        
+        .marca {
+            position: absolute;
+            right: 4px;
+            font-size: 0.7rem;
+        }
+        
+        .marca.importante {
+            font-weight: bold;
+            color: var(--danger);
+        }
+        
+        .icono {
+            position: absolute;
+            font-size: 28px;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            z-index: 7;
+            text-shadow: 0 0 3px white;
+            transform: translateX(-50%);
+        }
+        
+        .resultado-simulador {
+            position: absolute;
+            bottom: 90px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 8;
+            width: 180px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .impacto-normal { color: var(--primary); }
+        .impacto-alerta { color: var(--warning); }
+        .impacto-peligro { color: var(--danger); font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+  <h3><strong>Alerta Temprana Arroyo Escobar</strong></h3>
+  
+  <!-- Selector de escenarios -->
+  <div class="control-group">
+    <label for="duracion">Duración de lluvia:</label>
+    <select id="duracion">
+      <option value="24h">24 horas (tormenta intensa)</option>
+      <option value="48h">48 horas (lluvias intermitentes)</option>
+      <option value="72h">72 horas (lluvia persistente)</option>
+    </select>
+  </div>
+  
+  <!-- Control de lluvia -->
+  <div class="control-group">
+    <label for="lluvia">Lluvia acumulada: <span id="lluvia-value">40</span> mm</label>
+    <input type="range" id="lluvia" min="40" max="240" step="10" value="40">
+  </div>
+  
+  <!-- Factores de corrección -->
+  <div class="checkbox-group">
+    <label>Factores de riesgo:</label>
+    <label><input type="checkbox" id="sudestada"> Sudestada (+50 cm)</label>
+    <label><input type="checkbox" id="lluvia_aguas_arriba"> Lluvia aguas arriba (+30 cm)</label>
+  </div>
+  
+  <!-- Simulador -->
+  <div id="mapa">
+    <!-- Capas base -->
+    <div class="cauce"></div>
+    <div class="terreno"></div>
+    
+    <!-- Línea de desborde (3.6m) -->
+    <div class="limite-desborde" title="Altura crítica de desborde"></div>
+    
+    <!-- Plataformas -->
+    <div class="plataforma" id="plataforma1"></div>
+    <div class="plataforma" id="plataforma2"></div>
+    <div class="plataforma" id="plataforma3"></div>
+    
+    <!-- Agua dinámica -->
+    <div class="agua" id="agua"></div>
+    
+    <!-- Regla de medición -->
+    <div class="regla" id="regla"></div>
+    
+    <!-- Resultados integrados -->
+    <div class="resultado-simulador">
+        <p><strong>Altura:</strong> <span id="altura-simulador">2.4</span> m</p>
+        <p><strong>Impacto:</strong> <span id="impacto-simulador" class="impacto-normal">Cauce normal</span></p>
+        <p><strong>Tiempos:</strong> <span id="tiempo-pico">8h (pico)</span></p>
+        <p><strong>Normalización:</strong> <span id="normalizacion">12h</span></p>
+    </div>
+    
+    <!-- Iconos -->
+    <div class="icono" id="arbol">🌳</div>
+    <div class="icono" id="casa1">🏠</div>
+    <div class="icono" id="casa2">🏠</div>
+    <div class="icono" id="casas">🏘</div>
+    <div class="icono" id="autopista r9">⚠️</div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuración
+    const config = {
+      maxAltura: 5.3,
+      desborde: 3.6,
+      escalaPx: 400
+    };
+    
+    // Elementos UI
+    const elementos = {
+      lluvia: document.getElementById('lluvia'),
+      duracion: document.getElementById('duracion'),
+      sudestada: document.getElementById('sudestada'),
+      lluviaArriba: document.getElementById('lluvia_aguas_arriba')
+    };
+    
+    // Niveles de alerta mejorados
+    const nivelesAlerta = [
+        { 
+            max: 2.5, 
+            impacto: "Cauce normal (¼ caudal)", 
+            clase: "impacto-normal",
+            pico: 8,
+            descenso: 4,
+            normalizacion: 12
+        },
+        { 
+            max: 3.0, 
+            impacto: "Cauce normal (½ caudal)", 
+            clase: "impacto-normal",
+            pico: 6,
+            descenso: 3,
+            normalizacion: 10
+        },
+        { 
+            max: 3.6, 
+            impacto: "Cauce alto (¾ caudal)", 
+            clase: "impacto-alerta",
+            pico: 5,
+            descenso: 6,
+            normalizacion: 14
+        },
+        { 
+            max: 4.0, 
+            impacto: "Desborde leve (calles)", 
+            clase: "impacto-alerta",
+            pico: 4,
+            descenso: 8,
+            normalizacion: 18
+        },
+        { 
+            max: 4.5, 
+            impacto: "Desborde moderado (viviendas bajas)", 
+            clase: "impacto-peligro",
+            pico: 3,
+            descenso: 12,
+            normalizacion: 24
+        },
+        { 
+            max: 5.3, 
+            impacto: "INUNDACIÓN (viviendas altas)", 
+            clase: "impacto-peligro",
+            pico: 2,
+            descenso: 24,
+            normalizacion: 48
+        }
+    ];
+    
+    // Factores de tiempo por duración
+    const factoresTiempo = {
+        '24h': { pico: 0.8, descenso: 0.7 },
+        '48h': { pico: 1.0, descenso: 1.0 },
+        '72h': { pico: 1.5, descenso: 1.3 }
+    };
+
+    // Conversión metros → píxeles
+    function metrosAPx(metros) {
+      return (metros / config.maxAltura) * config.escalaPx;
+    }
+    
+    // Inicializar elementos estáticos
+    function inicializarSimulador() {
+      // Plataformas
+      document.getElementById('plataforma1').style.cssText = `
+        left: 40%; width: 30%; bottom: ${metrosAPx(4.1)}px; height: 10px`;
+      document.getElementById('plataforma2').style.cssText = `
+        left: 55%; width: 25%; bottom: ${metrosAPx(4.5)}px; height: 10px`;
+      document.getElementById('plataforma3').style.cssText = `
+        left: 70%; width: 20%; bottom: ${metrosAPx(4.8)}px; height: 10px`;
+      
+      // Iconos
+      document.getElementById('arbol').style.cssText = `
+        bottom: ${metrosAPx(3.6)}px; left: 30%`;
+      document.getElementById('casa1').style.cssText = `
+        bottom: ${metrosAPx(4.1)}px; left: 45%`;
+      document.getElementById('casa2').style.cssText = `
+        bottom: ${metrosAPx(4.5)}px; left: 60%`;
+      document.getElementById('casas').style.cssText = `
+        bottom: ${metrosAPx(4.8)}px; left: 75%`;
+      document.getElementById('alerta').style.cssText = `
+        bottom: ${metrosAPx(5.0)}px; left: 85%`;
+      
+      // Línea de desborde (3.6m)
+      document.querySelector('.limite-desborde').style.bottom = 
+        `${config.escalaPx - metrosAPx(config.desborde)}px`;
+      
+      // Regla de medición
+      const regla = document.getElementById('regla');
+      regla.innerHTML = '';
+      for (let m = 0; m <= config.maxAltura; m += 0.5) {
+        const marca = document.createElement('div');
+        marca.className = 'marca' + (m === config.desborde ? ' importante' : '');
+        marca.style.top = `${config.escalaPx - metrosAPx(m)}px`;
+        marca.textContent = `${m.toFixed(1)}m`;
+        regla.appendChild(marca);
+      }
+    }
+    
+    // Determinar nivel de impacto
+    function determinarImpacto(altura, duracion) {
+        const nivel = nivelesAlerta.find(n => altura <= n.max) || nivelesAlerta[nivelesAlerta.length - 1];
+        const factor = factoresTiempo[duracion];
+        
+        return {
+            texto: nivel.impacto,
+            clase: nivel.clase,
+            pico: Math.round(nivel.pico * factor.pico),
+            descenso: Math.round(nivel.descenso * factor.descenso),
+            normalizacion: Math.round(nivel.normalizacion * factor.descenso)
+        };
+    }
+    
+    // Calcular altura con todos los factores
+    function calcularAltura() {
+      const lluvia = parseInt(elementos.lluvia.value);
+      let alturaBase = 1.3 + (lluvia - 40) * (4 / 260); // Fórmula hidrológica
+      const duracion = elementos.duracion.value;
+      
+      // Ajuste por duración
+      switch(duracion) {
+        case '24h': alturaBase *= 1.2; break;
+        case '72h': alturaBase *= 1.4; break;
+      }
+      
+      // Factores de corrección
+      if (elementos.sudestada.checked) alturaBase += 0.5;
+      if (elementos.lluviaArriba.checked) alturaBase += 0.3;
+      
+      const impacto = determinarImpacto(alturaBase, duracion);
+      
+      return {
+        altura: Math.min(alturaBase, config.maxAltura),
+        impacto: impacto
+      };
+    }
+    
+    // Actualizar simulación
+    function actualizarSimulacion() {
+      const { altura, impacto } = calcularAltura();
+      
+      // Actualizar UI
+      document.getElementById('lluvia-value').textContent = elementos.lluvia.value;
+      document.getElementById('altura-simulador').textContent = altura.toFixed(1);
+      
+      const impactoElement = document.getElementById('impacto-simulador');
+      impactoElement.textContent = impacto.texto;
+      impactoElement.className = impacto.clase;
+      
+      document.getElementById('tiempo-pico').textContent = 
+        `${impacto.pico}h (pico) / ${impacto.descenso}h (descenso)`;
+      document.getElementById('normalizacion').textContent = `${impacto.normalizacion}h`;
+      
+      // Actualizar agua
+      document.getElementById('agua').style.height = `${metrosAPx(altura)}px`;
+    }
+    
+    // Eventos
+    elementos.lluvia.addEventListener('input', actualizarSimulacion);
+    elementos.duracion.addEventListener('change', actualizarSimulacion);
+    elementos.sudestada.addEventListener('change', actualizarSimulacion);
+    elementos.lluviaArriba.addEventListener('change', actualizarSimulacion);
+    
+    // Iniciar
+    inicializarSimulador();
+    actualizarSimulacion();
+});
+</script>
+</body>
+</html>
