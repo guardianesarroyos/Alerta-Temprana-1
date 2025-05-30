@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -79,7 +79,7 @@
       cursor: pointer;
     }
 
-    .slider-container, .checkboxes, .impact-container {
+    .slider-container, .checkboxes {
       width: 100%;
       margin-top: 1rem;
     }
@@ -136,10 +136,45 @@
       background: transparent;
     }
 
+    /* NUEVO: Estilo para impact-container resaltado */
+    .impact-container {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border: 2px solid #00bfff;
+      border-radius: 12px;
+      background-color: rgba(0, 191, 255, 0.15);
+      box-shadow: 0 0 8px #00bfff88;
+      color: #a0eaff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px #00bfffaa;
+      user-select: none;
+    }
+
+    .impact-container p {
+      margin: 0.3rem 0;
+    }
+
     .footer {
       margin-top: 2rem;
       font-size: 0.8rem;
       color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      .impact-container {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+      }
+
+      .level-bar {
+        width: 50px;
+      }
+
+      .mark {
+        font-size: 0.6rem;
+      }
     }
   </style>
 </head>
@@ -253,26 +288,37 @@
       let altura = fila[parseInt(scenario.value) / 24 - 1];
       if (sudestada.checked) altura += 0.2;
       if (aguasArriba.checked) altura += 0.2;
-      if (sueloSaturado.checked) altura += 0.2;
-      altura = parseFloat(altura.toFixed(2));
+      if (sueloSaturado.checked) altura += 0.3;
 
-      // Limitar visualmente a 5.5m
-      const alturaVisual = Math.min(altura, 5.5);
+      altura = Math.min(altura, 5.8);
+      alturaDisplay.textContent = altura.toFixed(2);
 
-      alturaDisplay.textContent = altura;
-      impactoDisplay.textContent = fila[3];
+      // Impacto estimado simple según altura
+      let impacto = "Sin impacto";
+      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: Inundación de terrenos bajos y calles";
+      else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
+      else if (altura >= 4.5 && altura < 5.2) impacto = "Inundación de casas medias y altas";
+      else if (altura >= 5.2) impacto = "Corte de ruta, inundación severa";
 
-      let alturaPercent = Math.min((alturaVisual / 5.5) * 100, 100);
-      levelFill.style.height = alturaPercent + "%";
-      rainValue.textContent = mm;
+      impactoDisplay.textContent = impacto;
+
+      // Actualizar barra vertical
+      const maxAltura = 5.8;
+      const porcentaje = (altura / maxAltura) * 100;
+      levelFill.style.height = porcentaje + "%";
     }
 
-    rain.addEventListener("input", updateValues);
+    rain.addEventListener("input", () => {
+      rainValue.textContent = rain.value;
+      updateValues();
+    });
+
     scenario.addEventListener("change", updateValues);
     sudestada.addEventListener("change", updateValues);
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
+    // Inicializa
     updateValues();
   </script>
 </body>
