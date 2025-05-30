@@ -3,18 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alerta Temprana de Lluvias</title>
+  <title>Alerta Temprana - Arroyo Escobar</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #121212;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       padding: 1rem;
-      position: relative;
     }
 
     .header {
@@ -27,10 +23,8 @@
       font-size: 1.5rem;
     }
 
-    .selector-container {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
+    .selector-container, .slider-container, .checkboxes, .impact-container, .info-buttons {
+      margin-bottom: 1rem;
     }
 
     .tooltip {
@@ -60,93 +54,52 @@
       opacity: 1;
     }
 
-    .info-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+    .slider-container input[type="range"] {
+      width: 100%;
     }
 
-    .info-buttons button {
+    .barra-container {
+      position: relative;
+      height: 800px;
+      width: 120px;
       background-color: #333;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 0.25rem 0.5rem;
-      cursor: pointer;
-    }
-
-    .slider-container {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .slider-container label {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-
-    .checkboxes {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .impact-container {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .level-bar {
-      position: absolute;
-      right: 10px;
-      top: 10%;
-      height: 80vh;
-      max-height: 800px; /* 5.50 m visual máximo */
-      width: 120px; /* 3x más ancho */
-      background-color: rgba(51, 51, 51, 0.7);
       border-radius: 10px;
-      overflow: visible;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .nivel-agua {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #00bfff;
+      transition: height 0.3s ease;
+    }
+
+    .marcas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .marca {
+      position: absolute;
+      width: 100%;
       display: flex;
-      align-items: flex-end;
-      flex-direction: column;
-      padding-right: 10px;
+      justify-content: flex-end;
+      padding-right: 5px;
+      font-size: 0.75rem;
+      color: #ccc;
       box-sizing: border-box;
     }
 
-    .level-fill {
-      width: 60%;
-      background-color: #00bfff;
-      transition: height 0.3s ease;
-      position: absolute;
-      bottom: 0;
-      left: 20%;
-      border-radius: 10px 10px 0 0;
-      z-index: 1;
-    }
-
-    .level-marks {
-      position: relative;
-      width: 100%;
-      z-index: 2;
-    }
-
-    .mark {
-      position: absolute;
-      right: 0;
-      height: 1px;
-      background: #ccc;
-      width: 30px;
-    }
-
-    .mark-label {
-      position: absolute;
-      right: 35px;
-      color: #ccc;
-      font-size: 0.7rem;
-    }
-
-    footer {
+    .footer {
       margin-top: 2rem;
-      font-size: 0.75rem;
+      text-align: center;
+      font-size: 0.8rem;
       color: #888;
     }
   </style>
@@ -172,14 +125,14 @@
   </div>
 
   <div class="info-buttons">
-    <button onclick="alert('El escenario de 24 hs simula lluvias concentradas en un solo día. Responde rápido y suele provocar crecidas más abruptas.')">+ info 24h</button>
-    <button onclick="alert('El escenario de 48 hs contempla lluvias repartidas en dos días. El nivel sube más lento, pero se mantiene más tiempo.')">+ info 48h</button>
+    <button onclick="alert('El escenario de 24 hs simula lluvias concentradas en un solo d\u00eda. Responde r\u00e1pido y suele provocar crecidas m\u00e1s abruptas.')">+ info 24h</button>
+    <button onclick="alert('El escenario de 48 hs contempla lluvias repartidas en dos d\u00edas. El nivel sube m\u00e1s lento, pero se mantiene m\u00e1s tiempo.')">+ info 48h</button>
     <button onclick="alert('El escenario de 72 hs modela lluvias prolongadas. Puede saturar el suelo lentamente y generar crecidas prolongadas.')">+ info 72h</button>
   </div>
 
   <div class="slider-container">
     <label for="rain">Lluvia acumulada (mm): <span id="rainValue">0</span></label>
-    <input type="range" id="rain" min="0" max="300" step="10" value="0" style="width: 100%;" />
+    <input type="range" id="rain" min="0" max="300" step="10" value="0" />
   </div>
 
   <div class="checkboxes">
@@ -193,14 +146,14 @@
     <p>Impacto estimado: <span id="impacto"></span></p>
   </div>
 
-  <div class="level-bar">
-    <div class="level-fill" id="levelFill"></div>
-    <div class="level-marks" id="levelMarks"></div>
+  <div class="barra-container">
+    <div class="nivel-agua" id="nivelAgua" style="height: 0%"></div>
+    <div class="marcas" id="marcas"></div>
   </div>
 
-  <footer>
+  <div class="footer">
     Creado por guardianesarroyosba
-  </footer>
+  </div>
 
   <script>
     const rain = document.getElementById("rain");
@@ -211,8 +164,11 @@
     const sudestada = document.getElementById("sudestada");
     const aguasArriba = document.getElementById("aguasArriba");
     const sueloSaturado = document.getElementById("sueloSaturado");
-    const levelFill = document.getElementById("levelFill");
-    const levelMarks = document.getElementById("levelMarks");
+    const nivelAgua = document.getElementById("nivelAgua");
+    const marcasContainer = document.getElementById("marcas");
+
+    const ALTURA_MAX = 5.5; // metros
+    const ALTURA_PX = 800; // px altura visual
 
     const tabla = {
       0: [1.3, 1.16, 1.05, "Cauce 1/4"],
@@ -245,8 +201,19 @@
       270: [5.53, 4.92, 4.48, "Puente Autopista"],
       280: [5.62, 5.00, 4.55, "Puente Autopista"],
       290: [5.71, 5.08, 4.63, "Puente Autopista"],
-      300: [5.8, 5.16, 4.70, "Inundación Total"]
+      300: [5.8, 5.16, 4.70, "Inundaci\u00f3n Total"]
     };
+
+    function generarMarcas() {
+      for (let i = 0; i <= ALTURA_MAX; i += 0.25) {
+        const marca = document.createElement("div");
+        marca.className = "marca";
+        const porcentaje = (i / ALTURA_MAX) * 100;
+        marca.style.bottom = `${porcentaje}%`;
+        marca.innerText = `${i.toFixed(2)} m`;
+        marcasContainer.appendChild(marca);
+      }
+    }
 
     function updateValues() {
       const mm = parseInt(rain.value);
@@ -255,39 +222,25 @@
       if (sudestada.checked) altura += 0.2;
       if (aguasArriba.checked) altura += 0.2;
       if (sueloSaturado.checked) altura += 0.2;
-      altura = Math.min(altura, 5.5);
       altura = parseFloat(altura.toFixed(2));
+
+      const alturaLimitada = Math.min(altura, ALTURA_MAX);
+      const porcentaje = (alturaLimitada / ALTURA_MAX) * 100;
+      nivelAgua.style.height = `${porcentaje}%`;
+
       alturaDisplay.textContent = altura;
       impactoDisplay.textContent = fila[3];
-
-      const porcentaje = (altura / 5.5) * 100;
-      levelFill.style.height = porcentaje + "%";
       rainValue.textContent = mm;
     }
 
-    function generarMarcas() {
-      for (let i = 0; i <= 5.5; i += 0.25) {
-        const mark = document.createElement("div");
-        mark.className = "mark";
-        mark.style.bottom = (i / 5.5 * 100) + "%";
-        levelMarks.appendChild(mark);
-
-        const label = document.createElement("div");
-        label.className = "mark-label";
-        label.style.bottom = (i / 5.5 * 100 - 1) + "%";
-        label.textContent = i.toFixed(2) + " m";
-        levelMarks.appendChild(label);
-      }
-    }
+    generarMarcas();
+    updateValues();
 
     rain.addEventListener("input", updateValues);
     scenario.addEventListener("change", updateValues);
     sudestada.addEventListener("change", updateValues);
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
-
-    generarMarcas();
-    updateValues();
   </script>
 </body>
 </html>
