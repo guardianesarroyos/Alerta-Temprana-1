@@ -38,6 +38,10 @@
     .tooltip {
       position: relative;
       display: inline-block;
+      cursor: help;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      margin-left: 4px;
     }
 
     .tooltip .tooltiptext {
@@ -55,6 +59,8 @@
       transform: translateX(-50%);
       opacity: 0;
       transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
     }
 
     .tooltip:hover .tooltiptext {
@@ -215,9 +221,24 @@
   </div>
 
   <div class="checkboxes">
-    <label><input type="checkbox" id="sudestada" /> Sudestada</label><br />
-    <label><input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba</label><br />
-    <label><input type="checkbox" id="sueloSaturado" /> Suelos saturados</label>
+    <label>
+      <input type="checkbox" id="sudestada" /> Sudestada
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Altura del río Luján superior a 200 cm en Dique Luján (ver app "Altura del Río")</span>
+      </span>
+    </label><br />
+    <label>
+      <input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Lluvia acumulada en Pilar según estaciones Meteo linderas al arroyo Pinazo-Escobar</span>
+      </span>
+    </label><br />
+    <label>
+      <input type="checkbox" id="sueloSaturado" /> Suelos saturados
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Inundaciones completas de suelos o lluvias prolongadas (>120 mm) en los últimos 10 días</span>
+      </span>
+    </label>
   </div>
 
   <div class="impact-container">
@@ -310,7 +331,6 @@
 
       impactoDisplay.textContent = impacto;
 
-      // CORRECCIÓN PRECISA: Sincronización exacta con marcas físicas
       const porcentaje = (altura / 5.8) * 100;
       levelFill.style.height = porcentaje + "%";
     }
