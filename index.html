@@ -161,8 +161,25 @@
       margin: 0.3rem 0;
     }
 
+    /* ESTILOS AJUSTADOS PARA FRASES AMBIENTALES */
+    .frase-ambiental-container {
+      width: calc(100% - 80px);
+      margin: 1rem 0 0.5rem 0;
+      padding: 8px 12px;
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+      font-style: italic;
+      font-weight: normal;
+      color: #FF6D00;
+      background-color: rgba(255, 109, 0, 0.08);
+      border-radius: 6px;
+      font-size: 0.85em;
+      border-left: 3px solid rgba(255, 109, 0, 0.3);
+      opacity: 0.9;
+    }
+
     .footer {
-      margin-top: 2rem;
+      margin-top: 0.5rem;
       font-size: 0.8rem;
       color: #aaa;
       width: calc(100% - 80px);
@@ -170,7 +187,7 @@
     }
 
     @media (max-width: 600px) {
-      .slider-container, .checkboxes, .impact-container, .footer {
+      .slider-container, .checkboxes, .impact-container, .footer, .frase-ambiental-container {
         width: calc(85% - 60px);
       }
 
@@ -185,6 +202,11 @@
 
       .mark {
         font-size: 0.6rem;
+      }
+
+      .frase-ambiental-container {
+        font-size: 0.8em;
+        padding: 6px 10px;
       }
     }
   </style>
@@ -246,16 +268,22 @@
     <p>Impacto estimado: <span id="impacto"></span></p>
   </div>
 
+  <!-- CONTENEDOR DE FRASES AMBIENTALES (ESTILO DISCRETO) -->
+  <div class="frase-ambiental-container" id="fraseAmbiental">
+    <!-- Las frases se cargarán aquí automáticamente -->
+  </div>
+
   <div class="level-bar">
     <div class="level-fill" id="levelFill"></div>
     <div class="marks" id="marks"></div>
   </div>
 
   <div class="footer">
-    Creado por guardianesarroyosba@gmail.com © vecinos autoconvocados Ing.Maschwitz
+    Creado por guardianesarroyosba © vecinos autoconvocados 
   </div>
 
   <script>
+    // VARIABLES DE LA APLICACIÓN PRINCIPAL
     const rain = document.getElementById("rain");
     const rainValue = document.getElementById("rainValue");
     const alturaDisplay = document.getElementById("altura");
@@ -267,13 +295,7 @@
     const levelFill = document.getElementById("levelFill");
     const marks = document.getElementById("marks");
 
-    for (let i = 5.8; i >= 0; i -= 0.25) {
-      const mark = document.createElement("div");
-      mark.classList.add("mark");
-      mark.textContent = i.toFixed(2);
-      marks.appendChild(mark);
-    }
-
+    // TABLA DE DATOS PARA CÁLCULOS
     const tabla = {
       0: [1.3, 1.16, 1.05, "Cauce 1/4"],
       10: [1.4, 1.25, 1.13, "Cauce 1/4"],
@@ -308,6 +330,7 @@
       300: [5.8, 5.16, 4.70, "Inundación Total"]
     };
 
+    // FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN
     function updateValues() {
       const mm = parseInt(rain.value);
       let mmEfectivos = mm;
@@ -335,6 +358,50 @@
       levelFill.style.height = porcentaje + "%";
     }
 
+    // MARCADORES PARA LA BARRA DE NIVEL
+    for (let i = 5.8; i >= 0; i -= 0.25) {
+      const mark = document.createElement("div");
+      mark.classList.add("mark");
+      mark.textContent = i.toFixed(2);
+      marks.appendChild(mark);
+    }
+
+    // SISTEMA DE FRASES AMBIENTALES
+    const frasesAmbientales = [
+      "No es el clima, es la desidia.",
+      "El arroyo limpio es vida para todos, no lujo para pocos.",
+      "No es la lluvia, es la falta de obras.",
+      "Agua sana, barrio digno.",
+      "No es el cambio climático, es el abandono a los vecinos.",
+      "El arroyo es de todos: cuidémoslo, no demos la espalda.",
+      "No culpes al cielo: exigí obras en la tierra.",
+      "Sin basura, sin cloacas, con vida: así queremos el arroyo.",
+      "No nos inunda el clima, nos inunda la inacción.",
+      "Saneamiento es respeto: por la naturaleza y por los vecinos.",
+      "No es un desastre natural, es un desastre político.",
+      "Por un arroyo con peces, con árboles saludables y sin contaminación.",
+      "El agua cae del cielo, pero los daños vienen de abajo.",
+      "Queremos un arroyo que fluya, no que enferme.",
+      "No es la naturaleza, es la falta de infraestructura.",
+      "El arroyo no es fondo de patio, es patrimonio vecinal.",
+      "No es el cambio climático, es la falta de obras.",
+      "El agua limpia no distingue barrios: defendámosla juntos."
+    ];
+
+    function mostrarFraseDelDia() {
+      // Calculamos días desde una fecha fija para mantener consistencia
+      const hoy = new Date();
+      const inicio = new Date(2023, 0, 1); // 1 de enero de 2023
+      const diff = hoy - inicio;
+      const unDia = 1000 * 60 * 60 * 24;
+      const diasTranscurridos = Math.floor(diff / unDia);
+      
+      // Seleccionamos la frase según el día manteniendo el orden exacto
+      const indice = diasTranscurridos % frasesAmbientales.length;
+      document.getElementById('fraseAmbiental').textContent = frasesAmbientales[indice];
+    }
+
+    // EVENT LISTENERS PARA LA APLICACIÓN PRINCIPAL
     rain.addEventListener("input", () => {
       rainValue.textContent = rain.value;
       updateValues();
@@ -345,7 +412,9 @@
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
-    updateValues();
+    // INICIALIZACIÓN
+    updateValues(); // Actualizar valores iniciales
+    mostrarFraseDelDia(); // Mostrar la frase del día al cargar
   </script>
 </body>
 </html>
