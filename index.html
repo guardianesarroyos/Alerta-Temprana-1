@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -80,7 +80,7 @@
     }
 
     .slider-container, .checkboxes {
-      width: 100%;
+      width: calc(100% - 80px); /* Reducimos el ancho para no superponer con la regla */
       margin-top: 1rem;
     }
 
@@ -136,9 +136,8 @@
       background: transparent;
     }
 
-    /* NUEVO: Estilo para impact-container resaltado */
     .impact-container {
-      width: 100%;
+      width: calc(100% - 80px); /* Mismo ancho que el slider */
       margin-top: 1.5rem;
       padding: 1rem 1.2rem;
       border: 2px solid #00bfff;
@@ -160,9 +159,15 @@
       margin-top: 2rem;
       font-size: 0.8rem;
       color: #aaa;
+      width: calc(100% - 80px); /* Mismo ancho que el slider */
+      text-align: center;
     }
 
     @media (max-width: 600px) {
+      .slider-container, .checkboxes, .impact-container, .footer {
+        width: calc(100% - 60px); /* Ajuste para móviles */
+      }
+
       .impact-container {
         font-size: 1rem;
         padding: 0.8rem 1rem;
@@ -212,7 +217,7 @@
   <div class="checkboxes">
     <label><input type="checkbox" id="sudestada" /> Sudestada</label><br />
     <label><input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba</label><br />
-    <label><input type="checkbox" id="sueloSaturado" /> Suelo impermeable</label>
+    <label><input type="checkbox" id="sueloSaturado" /> Suelos saturados</label> <!-- Cambiado a "Suelos saturados" -->
   </div>
 
   <div class="impact-container">
@@ -226,7 +231,7 @@
   </div>
 
   <div class="footer">
-    Creado por guardianesarroyosba
+    Creado por guardianesarroyosba ©
   </div>
 
   <script>
@@ -284,16 +289,19 @@
 
     function updateValues() {
       const mm = parseInt(rain.value);
-      const fila = tabla[mm];
+      let mmEfectivos = mm;
+      
+      if (sueloSaturado.checked) mmEfectivos = Math.min(mm * 2, 300);
+      
+      const fila = tabla[mmEfectivos];
       let altura = fila[parseInt(scenario.value) / 24 - 1];
+      
       if (sudestada.checked) altura += 0.2;
       if (aguasArriba.checked) altura += 0.2;
-      if (sueloSaturado.checked) altura += 0.3;
 
       altura = Math.min(altura, 5.8);
       alturaDisplay.textContent = altura.toFixed(2);
 
-      // Impacto estimado simple según altura
       let impacto = "Sin impacto";
       if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: Inundación de terrenos bajos y calles";
       else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
@@ -302,7 +310,6 @@
 
       impactoDisplay.textContent = impacto;
 
-      // Actualizar barra vertical
       const maxAltura = 5.8;
       const porcentaje = (altura / maxAltura) * 100;
       levelFill.style.height = porcentaje + "%";
@@ -318,7 +325,6 @@
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
-    // Inicializa
     updateValues();
   </script>
 </body>
