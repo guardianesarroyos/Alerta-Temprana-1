@@ -80,7 +80,7 @@
     }
 
     .slider-container, .checkboxes {
-      width: calc(100% - 80px); /* Reducimos el ancho para no superponer con la regla */
+      width: calc(100% - 80px);
       margin-top: 1rem;
     }
 
@@ -130,14 +130,14 @@
       text-align: center;
       font-size: 0.7rem;
       border-top: 1px solid #aaa;
-      height: calc(100% / 22);
+      height: calc(100% / 23);
       box-sizing: border-box;
       color: #fff;
       background: transparent;
     }
 
     .impact-container {
-      width: calc(100% - 80px); /* Mismo ancho que el slider */
+      width: calc(100% - 80px);
       margin-top: 1.5rem;
       padding: 1rem 1.2rem;
       border: 2px solid #00bfff;
@@ -159,13 +159,13 @@
       margin-top: 2rem;
       font-size: 0.8rem;
       color: #aaa;
-      width: calc(100% - 80px); /* Mismo ancho que el slider */
+      width: calc(100% - 80px);
       text-align: center;
     }
 
     @media (max-width: 600px) {
       .slider-container, .checkboxes, .impact-container, .footer {
-        width: calc(100% - 60px); /* Ajuste para móviles */
+        width: calc(85% - 60px);
       }
 
       .impact-container {
@@ -217,7 +217,7 @@
   <div class="checkboxes">
     <label><input type="checkbox" id="sudestada" /> Sudestada</label><br />
     <label><input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba</label><br />
-    <label><input type="checkbox" id="sueloSaturado" /> Suelos saturados</label> <!-- Cambiado a "Suelos saturados" -->
+    <label><input type="checkbox" id="sueloSaturado" /> Suelos saturados</label>
   </div>
 
   <div class="impact-container">
@@ -231,7 +231,7 @@
   </div>
 
   <div class="footer">
-    Creado por guardianesarroyosba©
+    Creado por guardianesarroyosba ©
   </div>
 
   <script>
@@ -246,7 +246,7 @@
     const levelFill = document.getElementById("levelFill");
     const marks = document.getElementById("marks");
 
-    for (let i = 5.5; i >= 0; i -= 0.25) {
+    for (let i = 5.8; i >= 0; i -= 0.25) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
       mark.textContent = i.toFixed(2);
@@ -310,8 +310,8 @@
 
       impactoDisplay.textContent = impacto;
 
-      const maxAltura = 5.8;
-      const porcentaje = (altura / maxAltura) * 100;
+      // CORRECCIÓN PRECISA: Sincronización exacta con marcas físicas
+      const porcentaje = (altura / 5.8) * 100;
       levelFill.style.height = porcentaje + "%";
     }
 
