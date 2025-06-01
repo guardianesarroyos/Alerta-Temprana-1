@@ -22,31 +22,92 @@
       margin-bottom: 1rem;
     }
 
-    .header h1 {
+    .header h1, .header h2 {
       margin: 0;
       font-size: 1.5rem;
     }
 
-    .selector-container, .info-buttons, .slider-container, .checkboxes, .impact-container, .frase-ambiental-container, .footer {
+    .selector-container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      margin-left: 4px;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .info-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .info-buttons button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+    }
+
+    .slider-container, .checkboxes {
       width: calc(100% - 80px);
       margin-top: 1rem;
     }
 
+    #rain {
+      width: 100%;
+    }
+
     .level-bar {
       position: fixed;
-      right: 20px;
+      right: 10px;
       top: 10%;
       height: 80vh;
       width: 60px;
       background-color: rgba(51, 51, 51, 0.6);
       border-radius: 10px;
       overflow: hidden;
-      z-index: 1;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       align-items: center;
-      pointer-events: none;
     }
 
     .level-fill {
@@ -55,7 +116,7 @@
       transition: height 0.3s ease;
       position: absolute;
       bottom: 0;
-      z-index: 2;
+      z-index: 1;
     }
 
     .marks {
@@ -66,7 +127,7 @@
       flex-direction: column;
       justify-content: flex-end;
       align-items: center;
-      z-index: 3;
+      z-index: 2;
       pointer-events: none;
     }
 
@@ -81,11 +142,9 @@
       background: transparent;
     }
 
-    #marcaCasa {
-      pointer-events: none;
-    }
-
     .impact-container {
+      width: calc(100% - 80px);
+      margin-top: 1.5rem;
       padding: 1rem 1.2rem;
       border: 2px solid #00bfff;
       border-radius: 12px;
@@ -98,10 +157,19 @@
       user-select: none;
     }
 
+    .impact-container p {
+      margin: 0.3rem 0;
+    }
+
+    /* ESTILOS AJUSTADOS PARA FRASES AMBIENTALES */
     .frase-ambiental-container {
+      width: calc(100% - 80px);
+      margin: 1rem 0 0.5rem 0;
       padding: 8px 12px;
       text-align: center;
+      font-family: 'Arial', sans-serif;
       font-style: italic;
+      font-weight: normal;
       color: #FF6D00;
       background-color: rgba(255, 109, 0, 0.08);
       border-radius: 6px;
@@ -110,58 +178,36 @@
       opacity: 0.9;
     }
 
-    /* Estilos para los modales */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #222;
-      padding: 1.5rem;
-      border-radius: 10px;
-      z-index: 100;
-      width: 90%;
-      max-width: 300px;
+    .footer {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #aaa;
+      width: calc(100% - 80px);
       text-align: center;
-      border: 1px solid #FF6D00;
     }
 
-    .modal h3 {
-      color: #FF6D00;
-      margin-top: 0;
-    }
+    @media (max-width: 600px) {
+      .slider-container, .checkboxes, .impact-container, .footer, .frase-ambiental-container {
+        width: calc(85% - 60px);
+      }
 
-    .modal input {
-      width: 100%;
-      padding: 8px;
-      margin: 10px 0;
-      border-radius: 4px;
-      border: none;
-    }
+      .impact-container {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+      }
 
-    .modal-buttons {
-      margin-top: 15px;
-    }
+      .level-bar {
+        width: 50px;
+      }
 
-    .btn-primary {
-      background: #FF6D00;
-      color: #000;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      font-weight: bold;
-      margin-right: 10px;
-      cursor: pointer;
-    }
+      .mark {
+        font-size: 0.6rem;
+      }
 
-    .btn-secondary {
-      background: transparent;
-      color: #FF6D00;
-      border: 1px solid #FF6D00;
-      padding: 7px 14px;
-      border-radius: 4px;
-      cursor: pointer;
+      .frase-ambiental-container {
+        font-size: 0.8em;
+        padding: 6px 10px;
+      }
     }
   </style>
 </head>
@@ -178,12 +224,17 @@
       <option value="48">48 hs</option>
       <option value="72">72 hs</option>
     </select>
+    <div class="tooltip">ⓘ
+      <span class="tooltiptext">
+        Seleccioná la duración del evento de lluvia para estimar la altura del arroyo.
+      </span>
+    </div>
   </div>
 
   <div class="info-buttons">
-    <button onclick="alert('El escenario de 24 hs simula lluvias concentradas.')">+ info 24h</button>
-    <button onclick="alert('El escenario de 48 hs contempla lluvias repartidas.')">+ info 48h</button>
-    <button onclick="alert('El escenario de 72 hs modela lluvias prolongadas.')">+ info 72h</button>
+    <button onclick="alert('El escenario de 24 hs simula lluvias concentradas en un solo día. Responde rápido y suele provocar crecidas más abruptas.')">+ info 24h</button>
+    <button onclick="alert('El escenario de 48 hs contempla lluvias repartidas en dos días. El nivel sube más lento, pero se mantiene más tiempo.')">+ info 48h</button>
+    <button onclick="alert('El escenario de 72 hs modela lluvias prolongadas. Puede saturar el suelo lentamente y generar crecidas prolongadas.')">+ info 72h</button>
   </div>
 
   <div class="slider-container">
@@ -192,9 +243,24 @@
   </div>
 
   <div class="checkboxes">
-    <label><input type="checkbox" id="sudestada" /> Sudestada</label><br />
-    <label><input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba</label><br />
-    <label><input type="checkbox" id="sueloSaturado" /> Suelos saturados</label>
+    <label>
+      <input type="checkbox" id="sudestada" /> Sudestada
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Altura del río Luján superior a 200 cm en Dique Luján (ver app "Altura del Río")</span>
+      </span>
+    </label><br />
+    <label>
+      <input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Lluvia acumulada en Pilar según estaciones Meteo linderas al arroyo Pinazo-Escobar</span>
+      </span>
+    </label><br />
+    <label>
+      <input type="checkbox" id="sueloSaturado" /> Suelos saturados
+      <span class="tooltip">(+ info)
+        <span class="tooltiptext">Inundaciones completas de suelos o lluvias prolongadas (>120 mm) en los últimos 10 días</span>
+      </span>
+    </label>
   </div>
 
   <div class="impact-container">
@@ -202,35 +268,9 @@
     <p>Impacto estimado: <span id="impacto"></span></p>
   </div>
 
-  <div style="margin-top: 1rem;">
-    <button id="btnMiCasa" onclick="mostrarModalCasa()" style="background-color:#FF6D00; color:#000; border:none; border-radius:6px; padding:0.4rem 1rem; cursor:pointer; font-weight:bold;">
-      + Mi casa
-    </button>
-  </div>
-
-  <div class="frase-ambiental-container" id="fraseAmbiental"></div>
-
-  <!-- Modal para altura de casa -->
-  <div id="modalCasa" class="modal">
-    <h3>Altura de mi casa</h3>
-    <p>Ingresá la altura sobre el nivel del arroyo (en metros):</p>
-    <input type="number" id="alturaCasaInput" step="0.01" min="0" max="6" placeholder="Ej: 2.50" />
-    <div class="modal-buttons">
-      <button onclick="guardarAlturaCasa()" class="btn-primary">Guardar</button>
-      <button onclick="document.getElementById('modalCasa').style.display='none'" class="btn-secondary">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Modal para registro -->
-  <div id="modalRegistro" class="modal">
-    <h3>Registro opcional</h3>
-    <p>Ingresá tu email para guardar la altura de tu casa:</p>
-    <input type="email" id="emailInput" placeholder="tu@email.com" />
-    <div class="modal-buttons">
-      <button onclick="registrarUsuario()" class="btn-primary">Registrar</button>
-      <button onclick="document.getElementById('modalRegistro').style.display='none'" class="btn-secondary">Cancelar</button>
-    </div>
-    <p style="font-size:0.7em; margin-bottom:0;">Solo te contactaremos para mejoras del servicio</p>
+  <!-- CONTENEDOR DE FRASES AMBIENTALES (ESTILO DISCRETO) -->
+  <div class="frase-ambiental-container" id="fraseAmbiental">
+    <!-- Las frases se cargarán aquí automáticamente -->
   </div>
 
   <div class="level-bar">
@@ -239,11 +279,11 @@
   </div>
 
   <div class="footer">
-    Creado por guardianesarroyosba © vecinos autoconvocados
+    Creado por guardianesarroyosba © vecinos autoconvocados 
   </div>
 
   <script>
-    // Elementos del DOM
+    // VARIABLES DE LA APLICACIÓN PRINCIPAL
     const rain = document.getElementById("rain");
     const rainValue = document.getElementById("rainValue");
     const alturaDisplay = document.getElementById("altura");
@@ -255,40 +295,70 @@
     const levelFill = document.getElementById("levelFill");
     const marks = document.getElementById("marks");
 
-    // Tabla de referencia para cálculos
+    // TABLA DE DATOS PARA CÁLCULOS
     const tabla = {
-      0: [1.3, 1.16, 1.05],
-      100: [3.47, 3.09, 2.81],
-      200: [4.8, 4.27, 3.89],
-      300: [5.8, 5.16, 4.7]
+      0: [1.3, 1.16, 1.05, "Cauce 1/4"],
+      10: [1.4, 1.25, 1.13, "Cauce 1/4"],
+      20: [1.6, 1.42, 1.3, "Cauce 1/4"],
+      30: [1.9, 1.69, 1.54, "Cauce 1/4"],
+      40: [2.2, 1.96, 1.78, "Cauce 1/4"],
+      50: [2.6, 2.31, 2.11, "Cauce 1/2"],
+      60: [2.8, 2.49, 2.27, "Cauce 1/2"],
+      70: [3.0, 2.67, 2.43, "Cauce 1/2"],
+      80: [3.2, 2.85, 2.59, "Cauce 3/4"],
+      90: [3.33, 2.96, 2.7, "Cauce 3/4"],
+      100: [3.47, 3.09, 2.81, "Cauce 3/4"],
+      110: [3.6, 3.2, 2.92, "Cauce Completo"],
+      120: [3.77, 3.36, 3.06, "Terrenos bajos inundados"],
+      130: [3.93, 3.5, 3.18, "Terrenos bajos inundados"],
+      140: [4.1, 3.65, 3.32, "CASAS_Bajas"],
+      150: [4.23, 3.76, 3.43, "CASAS_Bajas"],
+      160: [4.37, 3.89, 3.54, "CASAS_Bajas"],
+      170: [4.5, 4.01, 3.65, "CASAS_Medias"],
+      180: [4.6, 4.09, 3.73, "CASAS_Medias"],
+      190: [4.7, 4.18, 3.81, "CASAS_Medias"],
+      200: [4.8, 4.27, 3.89, "CASAS_Altas"],
+      210: [4.92, 4.38, 3.99, "CASAS_Altas"],
+      220: [5.04, 4.49, 4.08, "CASAS_Altas"],
+      230: [5.15, 4.58, 4.17, "CASAS_Altas"],
+      240: [5.25, 4.67, 4.25, "Puente Autopista"],
+      250: [5.35, 4.76, 4.33, "Puente Autopista"],
+      260: [5.44, 4.84, 4.41, "Puente Autopista"],
+      270: [5.53, 4.92, 4.48, "Puente Autopista"],
+      280: [5.62, 5.00, 4.55, "Puente Autopista"],
+      290: [5.71, 5.08, 4.63, "Puente Autopista"],
+      300: [5.8, 5.16, 4.70, "Inundación Total"]
     };
 
-    // Función principal de cálculo
+    // FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN
     function updateValues() {
       const mm = parseInt(rain.value);
       let mmEfectivos = mm;
+      
       if (sueloSaturado.checked) mmEfectivos = Math.min(mm * 2, 300);
-      const fila = tabla[mmEfectivos] || tabla[0];
-      let altura = fila[parseInt(scenario.value) / 24 - 1] || 0;
+      
+      const fila = tabla[mmEfectivos];
+      let altura = fila[parseInt(scenario.value) / 24 - 1];
+      
       if (sudestada.checked) altura += 0.2;
       if (aguasArriba.checked) altura += 0.2;
+
       altura = Math.min(altura, 5.8);
       alturaDisplay.textContent = altura.toFixed(2);
 
       let impacto = "Sin impacto";
-      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: terrenos bajos, calles y casas";
+      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: terrenos bajos, calles  y casas Colman/Amancay";
       else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
       else if (altura >= 4.5 && altura < 5.2) impacto = "Inundación de casas medias y altas";
       else if (altura >= 5.2) impacto = "Corte de ruta, inundación severa";
 
       impactoDisplay.textContent = impacto;
-      levelFill.style.height = `${(altura / 5.8) * 100}%`;
-      
-      // Verificar si el agua supera la altura de la casa
-      verificarAlertaPersonalizada(altura);
+
+      const porcentaje = (altura / 5.8) * 100;
+      levelFill.style.height = porcentaje + "%";
     }
 
-    // Marcas en la barra de nivel
+    // MARCADORES PARA LA BARRA DE NIVEL
     for (let i = 5.8; i >= 0; i -= 0.25) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
@@ -296,92 +366,42 @@
       marks.appendChild(mark);
     }
 
-    // Frase ambiental del día
+    // SISTEMA DE FRASES AMBIENTALES
+    const frasesAmbientales = [
+      "No es el clima, es la desidia.",
+      "El arroyo limpio es vida para todos, no lujo para pocos.",
+      "No es la lluvia, es la falta de obras.",
+      "Agua sana, barrio digno.",
+      "No es el cambio climático, es el abandono a los vecinos.",
+      "El arroyo es de todos: cuidémoslo, no demos la espalda.",
+      "No culpes al cielo: exigí obras en la tierra.",
+      "Sin basura, sin cloacas, con vida: así queremos el arroyo.",
+      "No nos inunda el clima, nos inunda la inacción.",
+      "Saneamiento es respeto: por la naturaleza y por los vecinos.",
+      "No es un desastre natural, es un desastre político.",
+      "Por un arroyo con peces, con árboles saludables y sin contaminación.",
+      "El agua cae del cielo, pero los daños vienen de abajo.",
+      "Queremos un arroyo que fluya, no que enferme.",
+      "No es la naturaleza, es la falta de infraestructura.",
+      "El arroyo no es fondo de patio, es patrimonio vecinal.",
+      "No es el cambio climático, es la falta de obras.",
+      "El agua limpia no distingue barrios: defendámosla juntos."
+    ];
+
     function mostrarFraseDelDia() {
-      const frases = [
-        "No es la lluvia, es la falta de obras.",
-        "No nos inunda el clima, nos inunda la inacción.",
-        "El agua cae del cielo, pero los daños vienen de abajo."
-      ];
-      const hoy = new Date(), inicio = new Date(2023, 0, 1);
-      const i = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24)) % frases.length;
-      document.getElementById('fraseAmbiental').textContent = frases[i];
-    }
-
-    // Sistema de registro
-    function registrarUsuario() {
-      const email = document.getElementById('emailInput').value;
+      // Calculamos días desde una fecha fija para mantener consistencia
+      const hoy = new Date();
+      const inicio = new Date(2023, 0, 1); // 1 de enero de 2023
+      const diff = hoy - inicio;
+      const unDia = 1000 * 60 * 60 * 24;
+      const diasTranscurridos = Math.floor(diff / unDia);
       
-      if (!email.includes('@') || !email.includes('.')) {
-        alert("Por favor ingresá un email válido");
-        return;
-      }
-
-      // Guardar localmente
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('usuarioRegistrado', 'true');
-      
-      // Guardar en archivo (simulación)
-      guardarEmailEnTxt(email);
-      
-      alert("¡Registro exitoso! Ahora podés guardar la altura de tu casa.");
-      document.getElementById('modalRegistro').style.display = 'none';
+      // Seleccionamos la frase según el día manteniendo el orden exacto
+      const indice = diasTranscurridos % frasesAmbientales.length;
+      document.getElementById('fraseAmbiental').textContent = frasesAmbientales[indice];
     }
 
-    // Simulación de guardado en TXT
-    function guardarEmailEnTxt(email) {
-      console.log("Email guardado (simulación):", email);
-      // En producción, aquí iría la llamada a tu backend o servicio
-    }
-
-    // Altura de la casa
-    function mostrarModalCasa() {
-      if (localStorage.getItem('usuarioRegistrado') !== 'true') {
-        document.getElementById('modalRegistro').style.display = 'block';
-        return;
-      }
-      document.getElementById('modalCasa').style.display = 'block';
-    }
-
-    function guardarAlturaCasa() {
-      const valor = parseFloat(document.getElementById('alturaCasaInput').value);
-      if (!isNaN(valor)) {
-        localStorage.setItem('miAlturaCasa', valor.toFixed(2));
-        document.getElementById('modalCasa').style.display = 'none';
-        dibujarMarcaCasa();
-      }
-    }
-
-    function dibujarMarcaCasa() {
-      const alturaCasa = parseFloat(localStorage.getItem('miAlturaCasa'));
-      if (!isNaN(alturaCasa)) {
-        let marca = document.getElementById('marcaCasa');
-        if (marca) marca.remove();
-        
-        const barra = document.querySelector('.level-bar');
-        marca = document.createElement('div');
-        marca.id = 'marcaCasa';
-        marca.style.position = 'absolute';
-        marca.style.left = '0';
-        marca.style.width = '100%';
-        marca.style.height = '2px';
-        marca.style.background = 'orange';
-        marca.style.bottom = `${(alturaCasa / 5.8) * 100}%`;
-        marca.style.zIndex = 4;
-        marca.style.pointerEvents = 'none';
-        barra.appendChild(marca);
-      }
-    }
-
-    // Verificar alerta personalizada
-    function verificarAlertaPersonalizada(alturaArroyo) {
-      const alturaCasa = parseFloat(localStorage.getItem('miAlturaCasa'));
-      if (!isNaN(alturaCasa) && alturaArroyo >= alturaCasa) {
-        impactoDisplay.innerHTML += `<br><span style="color:#FF6D00">¡ALERTA! El agua alcanzaría tu casa</span>`;
-      }
-    }
-
-    // Event listeners
+    // EVENT LISTENERS PARA LA APLICACIÓN PRINCIPAL
     rain.addEventListener("input", () => {
       rainValue.textContent = rain.value;
       updateValues();
@@ -392,14 +412,9 @@
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
-    // Inicialización
-    updateValues();
-    mostrarFraseDelDia();
-
-    // Verificar si ya está registrado
-    if (localStorage.getItem('usuarioRegistrado') === 'true') {
-      dibujarMarcaCasa();
-    }
+    // INICIALIZACIÓN
+    updateValues(); // Actualizar valores iniciales
+    mostrarFraseDelDia(); // Mostrar la frase del día al cargar
   </script>
 </body>
 </html>
