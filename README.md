@@ -75,11 +75,11 @@ Este proyecto está licenciado bajo:
 
 Esto significa que podés:
 
-- ? Usar y compartir la app libremente.  
-- ?? Modificarla y adaptarla a otros arroyos.  
-- ?? Mencionar siempre a los autores originales.  
-- ? No usarla con fines comerciales.  
-- ?? Compartir tus versiones modificadas bajo esta misma licencia.
+- Usar y compartir la app libremente.  
+- Modificarla y adaptarla a otros arroyos.  
+- Mencionar siempre a los autores originales.  
+- No usarla con fines comerciales.  
+- Compartir tus versiones modificadas bajo esta misma licencia.
 
 ---
 Frase 
