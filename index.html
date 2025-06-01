@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alerta Temprana de Lluvias</title>
+  <title>Alerta Temprana Arroyo Escobar</title>
   <style>
     body {
       margin: 0;
@@ -572,9 +572,9 @@
       alturaDisplay.textContent = altura.toFixed(2);
 
       let impacto = "Sin impacto";
-      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: terrenos bajos y calles";
+      if (altura >= 3.6 && altura < 4.0) impacto = "Desborde a terrenos bajos y calles";
       else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
-      else if (altura >= 4.5 && altura < 5.2) impacto = "Inundación de casas medias y altas";
+      else if (altura >= 4.6 && altura < 5.1) impacto = "Inundación de casas medias y altas";
       else if (altura >= 5.2) impacto = "Corte de ruta, inundación severa";
 
       impactoDisplay.textContent = impacto;
