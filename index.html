@@ -85,13 +85,147 @@
       cursor: pointer;
     }
 
-    .slider-container, .checkboxes {
+    .slider-container {
       width: calc(100% - 80px);
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+      padding: 0.8rem 0;
+      background-color: rgba(51, 51, 51, 0.3);
+      border-radius: 8px;
     }
 
     #rain {
       width: 100%;
+      height: 24px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #333;
+      outline: none;
+      border-radius: 12px;
+      padding: 0;
+      margin: 15px 0;
+    }
+
+    #rain::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00bfff;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    #rain::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00bfff;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    #rainValue {
+      display: inline-block;
+      min-width: 40px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #00bfff;
+      background-color: rgba(0, 191, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+
+    /* Estilos para los botones toggle naranja */
+    .factors-container {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1.2rem 0;
+      width: calc(100% - 80px);
+    }
+
+    .factor-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .factor-toggle input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .factor-toggle .toggle-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.8rem;
+      border-radius: 20px;
+      background-color: #333;
+      color: #aaa;
+      border: 2px solid #444;
+      font-size: 0.85rem;
+      min-width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .factor-toggle input:checked + .toggle-button {
+      background-color: #ff9800;
+      color: #121212;
+      border-color: #ff9800;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
+    }
+
+    .factor-toggle .tooltip {
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      background-color: #ff9800;
+      color: #121212;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    .factor-toggle .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    .factor-toggle:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
     }
 
     .level-bar {
@@ -161,7 +295,27 @@
       margin: 0.3rem 0;
     }
 
-    /* ESTILOS AJUSTADOS PARA FRASES AMBIENTALES */
+    /* ESTILOS PARA "Mi Casa" */
+    .mi-casa-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #ff9800;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .mi-casa-label {
+      position: absolute;
+      right: 100%;
+      margin-right: 4px;
+      font-size: 0.8rem;
+      color: #ff9800;
+      pointer-events: none;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
     .frase-ambiental-container {
       width: calc(100% - 80px);
       margin: 1rem 0 0.5rem 0;
@@ -186,9 +340,37 @@
       text-align: center;
     }
 
+    .mi-casa-container {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      width: calc(100% - 80px);
+    }
+
+    .mi-casa-container input {
+      width: 80px;
+      padding: 4px;
+      border-radius: 4px;
+      border: none;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    .mi-casa-container button {
+      padding: 5px 8px;
+      background: #ff9800;
+      border: none;
+      border-radius: 4px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     @media (max-width: 600px) {
-      .slider-container, .checkboxes, .impact-container, .footer, .frase-ambiental-container {
-        width: calc(85% - 60px);
+      .slider-container, .factors-container, .impact-container, .footer, .frase-ambiental-container {
+        width: calc(90% - 60px);
       }
 
       .impact-container {
@@ -207,6 +389,25 @@
       .frase-ambiental-container {
         font-size: 0.8em;
         padding: 6px 10px;
+      }
+
+      #rain {
+        height: 20px;
+      }
+      
+      #rain::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+      }
+      
+      #rainValue {
+        font-size: 1rem;
+      }
+
+      .factor-toggle .toggle-button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-width: 80px;
       }
     }
   </style>
@@ -242,22 +443,27 @@
     <input type="range" id="rain" min="0" max="300" step="10" value="0" />
   </div>
 
-  <div class="checkboxes">
-    <label>
-      <input type="checkbox" id="sudestada" /> Sudestada
-      <span class="tooltip">(+ info)
+  <div class="factors-container">
+    <label class="factor-toggle">
+      <input type="checkbox" id="sudestada" />
+      <span class="toggle-button">Sudestada</span>
+      <span class="tooltip">?
         <span class="tooltiptext">Altura del río Luján superior a 200 cm en Dique Luján (ver app "Altura del Río")</span>
       </span>
-    </label><br />
-    <label>
-      <input type="checkbox" id="aguasArriba" /> Lluvias aguas arriba
-      <span class="tooltip">(+ info)
+    </label>
+
+    <label class="factor-toggle">
+      <input type="checkbox" id="aguasArriba" />
+      <span class="toggle-button">Aguas arriba</span>
+      <span class="tooltip">?
         <span class="tooltiptext">Lluvia acumulada en Pilar según estaciones Meteo linderas al arroyo Pinazo-Escobar</span>
       </span>
-    </label><br />
-    <label>
-      <input type="checkbox" id="sueloSaturado" /> Suelos saturados
-      <span class="tooltip">(+ info)
+    </label>
+
+    <label class="factor-toggle">
+      <input type="checkbox" id="sueloSaturado" />
+      <span class="toggle-button">Suelo saturado</span>
+      <span class="tooltip">?
         <span class="tooltiptext">Inundaciones completas de suelos o lluvias prolongadas (>120 mm) en los últimos 10 días</span>
       </span>
     </label>
@@ -268,7 +474,11 @@
     <p>Impacto estimado: <span id="impacto"></span></p>
   </div>
 
-  <!-- CONTENEDOR DE FRASES AMBIENTALES (ESTILO DISCRETO) -->
+  <div class="mi-casa-container">
+    <input type="number" id="miCasaInput" placeholder="Mi Casa (m)" step="0.01" min="2.5" max="6.0" />
+    <button id="miCasaButton">+ Mi Casa</button>
+  </div>
+
   <div class="frase-ambiental-container" id="fraseAmbiental">
     <!-- Las frases se cargarán aquí automáticamente -->
   </div>
@@ -276,6 +486,7 @@
   <div class="level-bar">
     <div class="level-fill" id="levelFill"></div>
     <div class="marks" id="marks"></div>
+    <!-- Aquí se insertará la línea de Mi Casa -->
   </div>
 
   <div class="footer">
@@ -283,7 +494,7 @@
   </div>
 
   <script>
-    // VARIABLES DE LA APLICACIÓN PRINCIPAL
+    // Elementos principales
     const rain = document.getElementById("rain");
     const rainValue = document.getElementById("rainValue");
     const alturaDisplay = document.getElementById("altura");
@@ -295,51 +506,65 @@
     const levelFill = document.getElementById("levelFill");
     const marks = document.getElementById("marks");
 
-    // TABLA DE DATOS PARA CÁLCULOS
+    // Elementos "Mi Casa"
+    const miCasaInput = document.getElementById("miCasaInput");
+    const miCasaButton = document.getElementById("miCasaButton");
+
+    // Contenedor de la barra y referencias de "Mi Casa"
+    const levelBar = document.querySelector(".level-bar");
+    let miCasaLine = null;
+    let miCasaLabel = null;
+
+    // Tabla de conversión lluvia → altura (según escenario)
     const tabla = {
-      0: [1.3, 1.16, 1.05, "Cauce 1/4"],
-      10: [1.4, 1.25, 1.13, "Cauce 1/4"],
-      20: [1.6, 1.42, 1.3, "Cauce 1/4"],
-      30: [1.9, 1.69, 1.54, "Cauce 1/4"],
-      40: [2.2, 1.96, 1.78, "Cauce 1/4"],
-      50: [2.6, 2.31, 2.11, "Cauce 1/2"],
-      60: [2.8, 2.49, 2.27, "Cauce 1/2"],
-      70: [3.0, 2.67, 2.43, "Cauce 1/2"],
-      80: [3.2, 2.85, 2.59, "Cauce 3/4"],
-      90: [3.33, 2.96, 2.7, "Cauce 3/4"],
-      100: [3.47, 3.09, 2.81, "Cauce 3/4"],
-      110: [3.6, 3.2, 2.92, "Cauce Completo"],
-      120: [3.77, 3.36, 3.06, "Terrenos bajos inundados"],
-      130: [3.93, 3.5, 3.18, "Terrenos bajos inundados"],
-      140: [4.1, 3.65, 3.32, "CASAS_Bajas"],
-      150: [4.23, 3.76, 3.43, "CASAS_Bajas"],
-      160: [4.37, 3.89, 3.54, "CASAS_Bajas"],
-      170: [4.5, 4.01, 3.65, "CASAS_Medias"],
-      180: [4.6, 4.09, 3.73, "CASAS_Medias"],
-      190: [4.7, 4.18, 3.81, "CASAS_Medias"],
-      200: [4.8, 4.27, 3.89, "CASAS_Altas"],
-      210: [4.92, 4.38, 3.99, "CASAS_Altas"],
-      220: [5.04, 4.49, 4.08, "CASAS_Altas"],
-      230: [5.15, 4.58, 4.17, "CASAS_Altas"],
-      240: [5.25, 4.67, 4.25, "Puente Autopista"],
-      250: [5.35, 4.76, 4.33, "Puente Autopista"],
-      260: [5.44, 4.84, 4.41, "Puente Autopista"],
-      270: [5.53, 4.92, 4.48, "Puente Autopista"],
-      280: [5.62, 5.00, 4.55, "Puente Autopista"],
-      290: [5.71, 5.08, 4.63, "Puente Autopista"],
-      300: [5.8, 5.16, 4.70, "Inundación Total"]
+      0: [1.3, 1.16, 1.05],
+      10: [1.4, 1.25, 1.13],
+      20: [1.6, 1.42, 1.3],
+      30: [1.9, 1.69, 1.54],
+      40: [2.2, 1.96, 1.78],
+      50: [2.6, 2.31, 2.11],
+      60: [2.8, 2.49, 2.27],
+      70: [3.0, 2.67, 2.43],
+      80: [3.2, 2.85, 2.59],
+      90: [3.33, 2.96, 2.7],
+      100: [3.47, 3.09, 2.81],
+      110: [3.6, 3.2, 2.92],
+      120: [3.77, 3.36, 3.06],
+      130: [3.93, 3.5, 3.18],
+      140: [4.1, 3.65, 3.32],
+      150: [4.23, 3.76, 3.43],
+      160: [4.37, 3.89, 3.54],
+      170: [4.5, 4.01, 3.65],
+      180: [4.6, 4.09, 3.73],
+      190: [4.7, 4.18, 3.81],
+      200: [4.8, 4.27, 3.89],
+      210: [4.92, 4.38, 3.99],
+      220: [5.04, 4.49, 4.08],
+      230: [5.15, 4.58, 4.17],
+      240: [5.25, 4.67, 4.25],
+      250: [5.35, 4.76, 4.33],
+      260: [5.44, 4.84, 4.41],
+      270: [5.53, 4.92, 4.48],
+      280: [5.62, 5.00, 4.55],
+      290: [5.71, 5.08, 4.63],
+      300: [5.8, 5.16, 4.70]
     };
 
-    // FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN
+    function obtenerAlturaDeTabla(mm) {
+      // redondeo a múltiplos de 10
+      const clave = Math.min(300, Math.floor(mm / 10) * 10);
+      return tabla[clave];
+    }
+
     function updateValues() {
       const mm = parseInt(rain.value);
       let mmEfectivos = mm;
-      
       if (sueloSaturado.checked) mmEfectivos = Math.min(mm * 2, 300);
-      
-      const fila = tabla[mmEfectivos];
-      let altura = fila[parseInt(scenario.value) / 24 - 1];
-      
+
+      const fila = obtenerAlturaDeTabla(mmEfectivos);
+      const idx = { "24": 0, "48": 1, "72": 2 }[scenario.value];
+      let altura = fila[idx];
+
       if (sudestada.checked) altura += 0.2;
       if (aguasArriba.checked) altura += 0.2;
 
@@ -347,7 +572,7 @@
       alturaDisplay.textContent = altura.toFixed(2);
 
       let impacto = "Sin impacto";
-      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: terrenos bajos, calles  y casas Colman/Amancay";
+      if (altura >= 3.6 && altura < 4.1) impacto = "Desborde: terrenos bajos y calles";
       else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
       else if (altura >= 4.5 && altura < 5.2) impacto = "Inundación de casas medias y altas";
       else if (altura >= 5.2) impacto = "Corte de ruta, inundación severa";
@@ -356,9 +581,19 @@
 
       const porcentaje = (altura / 5.8) * 100;
       levelFill.style.height = porcentaje + "%";
+
+      // Actualizar línea de "Mi Casa" si existe
+      if (miCasaLine) {
+        const valorCasa = parseFloat(miCasaInput.value);
+        if (!isNaN(valorCasa)) {
+          const pctCasa = (valorCasa / 5.8) * 100;
+          miCasaLine.style.bottom = pctCasa + "%";
+          miCasaLabel.style.bottom = pctCasa + "%";
+        }
+      }
     }
 
-    // MARCADORES PARA LA BARRA DE NIVEL
+    // Generar ticks
     for (let i = 5.8; i >= 0; i -= 0.25) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
@@ -366,7 +601,7 @@
       marks.appendChild(mark);
     }
 
-    // SISTEMA DE FRASES AMBIENTALES
+    // Frases ambientales
     const frasesAmbientales = [
       "No es el clima, es la desidia.",
       "El arroyo limpio es vida para todos, no lujo para pocos.",
@@ -389,32 +624,63 @@
     ];
 
     function mostrarFraseDelDia() {
-      // Calculamos días desde una fecha fija para mantener consistencia
       const hoy = new Date();
-      const inicio = new Date(2023, 0, 1); // 1 de enero de 2023
+      const inicio = new Date(2023, 0, 1);
       const diff = hoy - inicio;
       const unDia = 1000 * 60 * 60 * 24;
       const diasTranscurridos = Math.floor(diff / unDia);
-      
-      // Seleccionamos la frase según el día manteniendo el orden exacto
       const indice = diasTranscurridos % frasesAmbientales.length;
       document.getElementById('fraseAmbiental').textContent = frasesAmbientales[indice];
     }
 
-    // EVENT LISTENERS PARA LA APLICACIÓN PRINCIPAL
+    // Botón "+ Mi Casa"
+    miCasaButton.addEventListener("click", () => {
+      const valor = parseFloat(miCasaInput.value);
+      if (isNaN(valor) || valor < 0) {
+        alert("Ingresá un valor numérico válido para la altura de tu casa.");
+        return;
+      }
+      // Si ya existe, no crear de nuevo
+      if (!miCasaLine) {
+        miCasaLine = document.createElement("div");
+        miCasaLine.classList.add("mi-casa-line");
+        levelBar.appendChild(miCasaLine);
+
+        miCasaLabel = document.createElement("div");
+        miCasaLabel.classList.add("mi-casa-label");
+        miCasaLabel.textContent = `Mi Casa (${valor.toFixed(2)} m)`;
+        levelBar.appendChild(miCasaLabel);
+      }
+      // Ajustar posición inicial
+      const pctCasa = (valor / 5.8) * 100;
+      miCasaLine.style.bottom = pctCasa + "%";
+      miCasaLabel.style.bottom = pctCasa + "%";
+
+      // Actualizar texto de etiqueta en cada cambio de valor
+      miCasaInput.addEventListener("input", () => {
+        const nuevo = parseFloat(miCasaInput.value);
+        if (!isNaN(nuevo)) {
+          const pctN = (nuevo / 5.8) * 100;
+          miCasaLine.style.bottom = pctN + "%";
+          miCasaLabel.style.bottom = pctN + "%";
+          miCasaLabel.textContent = `Mi Casa (${nuevo.toFixed(2)} m)`;
+        }
+      });
+    });
+
+    // Listeners principales
     rain.addEventListener("input", () => {
       rainValue.textContent = rain.value;
       updateValues();
     });
-
     scenario.addEventListener("change", updateValues);
     sudestada.addEventListener("change", updateValues);
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
-    // INICIALIZACIÓN
-    updateValues(); // Actualizar valores iniciales
-    mostrarFraseDelDia(); // Mostrar la frase del día al cargar
+    // Inicialización
+    updateValues();
+    mostrarFraseDelDia();
   </script>
 </body>
 </html>
