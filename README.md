@@ -71,7 +71,7 @@ Licencia
 
 Este proyecto está licenciado bajo:
 
-### [?? CC BY-NC-SA 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es)
+### [CC BY-NC-SA 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es)
 
 Esto significa que podés:
 
