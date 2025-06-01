@@ -104,6 +104,60 @@
       border-left: 3px solid rgba(255, 109, 0, 0.3);
       opacity: 0.9;
     }
+
+    /* Estilos para los modales */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 1.5rem;
+      border-radius: 10px;
+      z-index: 100;
+      width: 90%;
+      max-width: 300px;
+      text-align: center;
+      border: 1px solid #FF6D00;
+    }
+
+    .modal h3 {
+      color: #FF6D00;
+      margin-top: 0;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: none;
+    }
+
+    .modal-buttons {
+      margin-top: 15px;
+    }
+
+    .btn-primary {
+      background: #FF6D00;
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #FF6D00;
+      border: 1px solid #FF6D00;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -144,25 +198,35 @@
   </div>
 
   <div style="margin-top: 1rem;">
-    <label style="font-size:0.9rem;"><input type="checkbox" id="registroCheck" /> Estoy registrado para personalizar mi alerta</label>
-  </div>
-
-  <div style="margin-top: 0.5rem;">
-    <button onclick="mostrarModalCasa()" style="background-color:#444; color:white; border:none; border-radius:6px; padding:0.4rem 1rem; cursor:pointer; font-size:0.9rem;">
+    <button id="btnMiCasa" onclick="mostrarModalCasa()" style="background-color:#FF6D00; color:#000; border:none; border-radius:6px; padding:0.4rem 1rem; cursor:pointer; font-weight:bold;">
       + Mi casa
     </button>
   </div>
 
-  <div id="modalCasa" style="display:none; position:fixed; top:30%; left:50%; transform:translateX(-50%); background:#222; padding:1rem; border-radius:8px; z-index:20; color:white; width:260px; text-align:center;">
-    <p style="margin-top:0;">Ingresá la altura de tu casa (m):</p>
-    <input type="number" id="alturaCasaInput" step="0.01" min="0" max="6" style="width:100%; margin-bottom:0.8rem; padding:0.4rem; border-radius:4px; border:none;" />
-    <br />
-    <button onclick="guardarAlturaCasa()" style="background-color:#00bfff; color:#000; border:none; border-radius:5px; padding:0.4rem 1rem; font-weight:bold; cursor:pointer;">
-      Guardar
-    </button>
+  <div class="frase-ambiental-container" id="fraseAmbiental"></div>
+
+  <!-- Modal para altura de casa -->
+  <div id="modalCasa" class="modal">
+    <h3>Altura de mi casa</h3>
+    <p>Ingresá la altura sobre el nivel del arroyo (en metros):</p>
+    <input type="number" id="alturaCasaInput" step="0.01" min="0" max="6" placeholder="Ej: 2.50" />
+    <div class="modal-buttons">
+      <button onclick="guardarAlturaCasa()" class="btn-primary">Guardar</button>
+      <button onclick="document.getElementById('modalCasa').style.display='none'" class="btn-secondary">Cancelar</button>
+    </div>
   </div>
 
-  <div class="frase-ambiental-container" id="fraseAmbiental"></div>
+  <!-- Modal para registro -->
+  <div id="modalRegistro" class="modal">
+    <h3>Registro opcional</h3>
+    <p>Ingresá tu email para guardar la altura de tu casa:</p>
+    <input type="email" id="emailInput" placeholder="tu@email.com" />
+    <div class="modal-buttons">
+      <button onclick="registrarUsuario()" class="btn-primary">Registrar</button>
+      <button onclick="document.getElementById('modalRegistro').style.display='none'" class="btn-secondary">Cancelar</button>
+    </div>
+    <p style="font-size:0.7em; margin-bottom:0;">Solo te contactaremos para mejoras del servicio</p>
+  </div>
 
   <div class="level-bar">
     <div class="level-fill" id="levelFill"></div>
@@ -174,6 +238,7 @@
   </div>
 
   <script>
+    // Elementos del DOM
     const rain = document.getElementById("rain");
     const rainValue = document.getElementById("rainValue");
     const alturaDisplay = document.getElementById("altura");
@@ -185,6 +250,7 @@
     const levelFill = document.getElementById("levelFill");
     const marks = document.getElementById("marks");
 
+    // Tabla de referencia para cálculos
     const tabla = {
       0: [1.3, 1.16, 1.05],
       100: [3.47, 3.09, 2.81],
@@ -192,6 +258,7 @@
       300: [5.8, 5.16, 4.7]
     };
 
+    // Función principal de cálculo
     function updateValues() {
       const mm = parseInt(rain.value);
       let mmEfectivos = mm;
@@ -211,8 +278,12 @@
 
       impactoDisplay.textContent = impacto;
       levelFill.style.height = `${(altura / 5.8) * 100}%`;
+      
+      // Verificar si el agua supera la altura de la casa
+      verificarAlertaPersonalizada(altura);
     }
 
+    // Marcas en la barra de nivel
     for (let i = 5.8; i >= 0; i -= 0.25) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
@@ -220,6 +291,7 @@
       marks.appendChild(mark);
     }
 
+    // Frase ambiental del día
     function mostrarFraseDelDia() {
       const frases = [
         "No es la lluvia, es la falta de obras.",
@@ -231,22 +303,36 @@
       document.getElementById('fraseAmbiental').textContent = frases[i];
     }
 
-    const registroCheck = document.getElementById('registroCheck');
-    registroCheck.addEventListener('change', () => {
-      if (registroCheck.checked) {
-        localStorage.setItem('usuarioRegistrado', 'true');
-        alert('Registro activado. Ahora podés marcar la altura de tu casa.');
-      } else {
-        localStorage.removeItem('usuarioRegistrado');
-        localStorage.removeItem('miAlturaCasa');
-        const marca = document.getElementById('marcaCasa');
-        if (marca) marca.remove();
+    // Sistema de registro
+    function registrarUsuario() {
+      const email = document.getElementById('emailInput').value;
+      
+      if (!email.includes('@') || !email.includes('.')) {
+        alert("Por favor ingresá un email válido");
+        return;
       }
-    });
 
+      // Guardar localmente
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('usuarioRegistrado', 'true');
+      
+      // Guardar en archivo (simulación)
+      guardarEmailEnTxt(email);
+      
+      alert("¡Registro exitoso! Ahora podés guardar la altura de tu casa.");
+      document.getElementById('modalRegistro').style.display = 'none';
+    }
+
+    // Simulación de guardado en TXT
+    function guardarEmailEnTxt(email) {
+      console.log("Email guardado (simulación):", email);
+      // En producción, aquí iría la llamada a tu backend o servicio
+    }
+
+    // Altura de la casa
     function mostrarModalCasa() {
       if (localStorage.getItem('usuarioRegistrado') !== 'true') {
-        alert("Registrate primero para usar esta función");
+        document.getElementById('modalRegistro').style.display = 'block';
         return;
       }
       document.getElementById('modalCasa').style.display = 'block';
@@ -266,6 +352,7 @@
       if (!isNaN(alturaCasa)) {
         let marca = document.getElementById('marcaCasa');
         if (marca) marca.remove();
+        
         const barra = document.querySelector('.level-bar');
         marca = document.createElement('div');
         marca.id = 'marcaCasa';
@@ -275,11 +362,20 @@
         marca.style.height = '2px';
         marca.style.background = 'orange';
         marca.style.bottom = `${(alturaCasa / 5.8) * 100}%`;
-        marca.style.zIndex = 5;
+        marca.style.zIndex = 3;
         barra.appendChild(marca);
       }
     }
 
+    // Verificar alerta personalizada
+    function verificarAlertaPersonalizada(alturaArroyo) {
+      const alturaCasa = parseFloat(localStorage.getItem('miAlturaCasa'));
+      if (!isNaN(alturaCasa) && alturaArroyo >= alturaCasa) {
+        impactoDisplay.innerHTML += `<br><span style="color:#FF6D00">¡ALERTA! El agua alcanzaría tu casa</span>`;
+      }
+    }
+
+    // Event listeners
     rain.addEventListener("input", () => {
       rainValue.textContent = rain.value;
       updateValues();
@@ -290,12 +386,13 @@
     aguasArriba.addEventListener("change", updateValues);
     sueloSaturado.addEventListener("change", updateValues);
 
+    // Inicialización
     updateValues();
     mostrarFraseDelDia();
 
+    // Verificar si ya está registrado
     if (localStorage.getItem('usuarioRegistrado') === 'true') {
       dibujarMarcaCasa();
-      document.getElementById('registroCheck').checked = true;
     }
   </script>
 </body>
