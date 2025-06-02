@@ -270,7 +270,7 @@
       text-align: center;
       font-size: 0.7rem;
       border-top: 1px solid #aaa;
-      height: calc(100% / 23);
+      height: calc(100% / 29); /* Ajustado para 0.20 m (29 marcas en 5.8 m) */
       box-sizing: border-box;
       color: #fff;
       background: transparent;
@@ -384,6 +384,7 @@
 
       .mark {
         font-size: 0.6rem;
+        height: calc(100% / 29); /* Ajuste para móviles */
       }
 
       .frase-ambiental-container {
@@ -593,8 +594,8 @@
       }
     }
 
-    // Generar ticks
-    for (let i = 5.8; i >= 0; i -= 0.25) {
+    // Generar ticks (NUEVO: cada 0.20 m)
+    for (let i = 5.8; i >= 0; i -= 0.20) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
       mark.textContent = i.toFixed(2);
