@@ -17,9 +17,42 @@
       position: relative;
     }
 
+    /* Estilos meteorológicos actualizados */
+    .datos-meteo {
+      position: fixed;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 0 0 5px 5px;
+      z-index: 100;
+      color: #00d4ff;
+      display: flex;
+      flex-direction: column;
+    }
+    #lluvia {
+      top: 0;
+      left: 0;
+      align-items: flex-start;
+    }
+    #temperatura {
+      top: 0;
+      right: 0;
+      align-items: flex-end;
+    }
+    .meteo-valor {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .meteo-detalle {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
     .header {
       text-align: center;
       margin-bottom: 1rem;
+      margin-top: 3.5rem;
     }
 
     .header h1, .header h2 {
@@ -140,7 +173,6 @@
       margin-left: 5px;
     }
 
-    /* Estilos para los botones toggle naranja */
     .factors-container {
       display: flex;
       gap: 0.8rem;
@@ -270,7 +302,7 @@
       text-align: center;
       font-size: 0.7rem;
       border-top: 1px solid #aaa;
-      height: calc(100% / 29); /* Ajustado para 0.20 m (29 marcas en 5.8 m) */
+      height: calc(100% / 29);
       box-sizing: border-box;
       color: #fff;
       background: transparent;
@@ -295,7 +327,6 @@
       margin: 0.3rem 0;
     }
 
-    /* ESTILOS PARA "Mi Casa" */
     .mi-casa-line {
       position: absolute;
       width: 100%;
@@ -384,7 +415,7 @@
 
       .mark {
         font-size: 0.6rem;
-        height: calc(100% / 29); /* Ajuste para móviles */
+        height: calc(100% / 29);
       }
 
       .frase-ambiental-container {
@@ -410,10 +441,28 @@
         font-size: 0.8rem;
         min-width: 80px;
       }
+
+      .datos-meteo {
+        font-size: 0.8rem;
+      }
+      .meteo-valor {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Datos meteorológicos actualizados -->
+  <div class="datos-meteo" id="lluvia">
+    <div class="meteo-valor" id="rain-value">-- mm</div>
+    <div class="meteo-detalle" id="rain-time">Lluvia acumulada r26 por día</div>
+  </div>
+  <div class="datos-meteo" id="temperatura">
+    <div class="meteo-valor" id="temp-value">-- °C</div>
+    <div class="meteo-detalle" id="temp-time"> Ing.Maschwtiz r26</div>
+  </div>
+
+  <!-- Contenido principal de Alerta Temprana -->
   <div class="header">
     <h1>Alerta Temprana</h1>
     <h1>Arroyo Escobar</h1>
@@ -495,6 +544,51 @@
   </div>
 
   <script>
+    // ===== CÓDIGO METEOROLÓGICO ACTUALIZADO =====
+    const stationId = "IINGEN39";
+    const apiKeyWunderground = "6532d6454b8aa370768e63d6ba5a832e";
+    const updateInterval = 5 * 60 * 1000; // 5 minutos
+
+    // Elementos DOM
+    const rainValueElement = document.getElementById('rain-value');
+    const rainTimeElement = document.getElementById('rain-time');
+    const tempValueElement = document.getElementById('temp-value');
+    const tempTimeElement = document.getElementById('temp-time');
+
+    function actualizarDatosWunderground() {
+      const url = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&apiKey=${apiKeyWunderground}`;
+      
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.observations?.length > 0) {
+            const obs = data.observations[0];
+            const updateTime = new Date(obs.obsTimeLocal);
+            const timeString = updateTime.toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'});
+            
+            // Actualizar lluvia
+            const rain = obs.metric.precipTotal;
+            rainValueElement.textContent = `${rain?.toFixed(1) || '--'} mm`;
+            rainTimeElement.textContent = `Actualizado ${timeString}`;
+            
+            // Actualizar temperatura
+            const temp = obs.metric.temp;
+            tempValueElement.textContent = `${temp?.toFixed(1) || '--'} °C`;
+            tempTimeElement.textContent = `Wunderground (CCMB50) ${timeString}`;
+          }
+        })
+        .catch(error => {
+          console.error("Error al obtener datos:", error);
+          rainTimeElement.textContent = "Error de conexión";
+          tempTimeElement.textContent = "Error de conexión";
+        });
+    }
+
+    // Actualizar inmediatamente y cada 5 minutos
+    actualizarDatosWunderground();
+    setInterval(actualizarDatosWunderground, updateInterval);
+
+    // ===== CÓDIGO DE ALERTA TEMPRANA =====
     // Elementos principales
     const rain = document.getElementById("rain");
     const rainValue = document.getElementById("rainValue");
@@ -574,9 +668,10 @@
 
       let impacto = "Sin impacto";
       if (altura >= 3.6 && altura < 4.0) impacto = "Desborde a terrenos bajos y calles";
-      else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas y medias";
-      else if (altura >= 4.6 && altura < 5.1) impacto = "Inundación de casas medias y altas";
-      else if (altura >= 5.2) impacto = "Corte de ruta, inundación severa";
+      else if (altura >= 4.1 && altura < 4.5) impacto = "Ingreso en casas bajas";
+      else if (altura >= 4.5 && altura < 4.8) impacto = "Ingreso en casas medias";
+      else if (altura >= 4.8 && altura < 5.0) impacto = "Ingreso en casas altas";
+      else if (altura >= 5.0) impacto = "Corte de ruta, inundación severa";
 
       impactoDisplay.textContent = impacto;
 
@@ -594,7 +689,7 @@
       }
     }
 
-    // Generar ticks (NUEVO: cada 0.20 m)
+    // Generar ticks (cada 0.20 m)
     for (let i = 5.8; i >= 0; i -= 0.20) {
       const mark = document.createElement("div");
       mark.classList.add("mark");
