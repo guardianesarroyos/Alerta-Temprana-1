@@ -1,94 +1,51 @@
-Alerta Temprana – Arroyo Escobar
+# Alerta Temprana
 
-*Alerta Temprana – Arroyo Escobar** es una aplicación web comunitaria diseñada para simular posibles crecidas del arroyo en función de la lluvia acumulada y ciertos factores hidrológicos. Permite anticipar escenarios de impacto y planificar medidas de prevención en barrios vulnerables.
+Aplicación comunitaria para la alerta temprana de eventos ambientales y emergencias, desarrollada por Guardianes Arroyos.
 
----
+## ¿Cómo podés usar esta app?
 
-¿Para qué sirve?
+La app ofrece dos formas de uso, para adaptarse a distintas necesidades y dispositivos:
 
-- Simular la altura estimada del arroyo según el pronóstico o lluvia acumulada real.
-- Activar factores que agravan la crecida (sudestada, lluvias aguas arriba, suelos saturados).
-- Visualizar el nivel de impacto territorial: desbordes, anegamientos, ingreso en viviendas, cortes de ruta.
-- Ingresar la altura de tu casa y recibir una alerta si el agua podría alcanzarla.
-- Registrar tu email para guardar datos personalizados en el navegador.
+### 1. Modo Página Web
 
----
+Podés acceder a la app directamente desde cualquier navegador web:
+- **Simplemente visitá:** [https://guardianesarroyos.github.io/Alerta-Temprana-1/](https://guardianesarroyos.github.io/Alerta-Temprana-1/)
+- No requiere instalación.
+- Compatible con computadoras y dispositivos móviles.
 
-Tecnologías utilizadas
+### 2. Modo App Instalable (PWA)
 
-Esta app está desarrollada con tecnologías web accesibles y sin frameworks externos:
+Si preferís tener la app instalada en tu celular (como una aplicación nativa), podés hacerlo gracias a la tecnología PWA:
+- Accedé a la web desde tu navegador móvil.
+- Buscá la opción "Agregar a la pantalla de inicio" (generalmente aparece en el menú del navegador).
+- ¡Listo! Ahora tendrás acceso directo como si fuera una app instalada.
 
-- **HTML5**  
-- **CSS3 (modo oscuro minimalista)**  
-- **JavaScript vanilla** (puro, sin dependencias)  
-- **Almacenamiento local (`localStorage`)** para datos del usuario
-
----
-
-Cómo usar la app?
-
-1. Abrí el archivo `index.html` en cualquier navegador moderno.
-2. Seleccioná el escenario de duración de la lluvia: 24, 48 o 72 horas.
-3. Ajustá la lluvia acumulada (hasta 300 mm).
-4. Activá los factores opcionales si aplican: sudestada, lluvias aguas arriba o suelos saturados.
-5. Observá la altura estimada del arroyo y el nivel de impacto.
-6. Podés ingresar la altura de tu casa y registrar tu email para guardar tu configuración.
+**Ventajas del modo PWA:**  
+- Acceso offline a funciones básicas.
+- Mejor integración con tu dispositivo móvil.
+- Experiencia similar a una aplicación nativa.
 
 ---
 
-Personalización para otros arroyos
+## ¿Para qué sirve esta app?
 
-Esta app está pensada como modelo replicable. Se puede adaptar fácilmente para otros arroyos modificando:
+- Recibir y enviar alertas ambientales en tiempo real.
+- Compartir información útil con la comunidad.
+- Visualizar mapas y reportes actualizados.
 
-- La **tabla de simulación** de alturas (`tabla` en JavaScript).
-- Las etiquetas visuales y nombres.
-- Los niveles de impacto y umbrales.
+## Colaborá o reportá un problema
 
-Comunidades vecinales, municipios u organizaciones pueden copiar y adaptar la app para su propio entorno hidrológico.
+Este proyecto es abierto y colaborativo. Si querés proponer mejoras, informar un error o sumarte al desarrollo, ¡te invitamos a participar!
 
----
-
-Contribuciones
-
-Este proyecto está abierto a colaboraciones. Si querés:
-
-- Sugerir mejoras,
-- Reportar errores,
-- Adaptar el simulador a otro arroyo,
-
-¡Bienvenido! Mantené la atribución a los creadores originales y respetá la licencia.
+- [Abrí un issue](https://github.com/guardianesarroyos/Alerta-Temprana-1/issues)
+- [Proponé un pull request](https://github.com/guardianesarroyos/Alerta-Temprana-1/pulls)
 
 ---
 
-Autores
-
-Creado por **guardianesarroyosba © vecinos autoconvocados**  
-App sin fines de lucro – uso comunitario y educativo
+### Créditos
+Desarrollado por Guardianes Arroyos y la comunidad.
 
 ---
 
-Licencia
-
-Este proyecto está licenciado bajo:
-
-### [CC BY-NC-SA 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es)
-
-Esto significa que podés:
-
-- Usar y compartir la app libremente.  
-- Modificarla y adaptarla a otros arroyos.  
-- Mencionar siempre a los autores originales.  
-- No usarla con fines comerciales.  
-- Compartir tus versiones modificadas bajo esta misma licencia.
-
----
-Frase 
-
-> *"No es el clima, es la falta de Obras"*
-
----
-
-Contacto
-
-Para propuestas de mejora, adaptaciones o articulación con otras cuencas, podés escribir a:  
-**guardianesarroyosba [arroba] gmail.com**
+¿Tenés dudas o sugerencias?  
+Contactanos por [Instagram](https://www.instagram.com/guardianesarroyos/) o [Email](mailto:guardianesarroyos@gmail.com).
