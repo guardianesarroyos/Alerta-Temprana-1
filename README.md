@@ -15,10 +15,10 @@ Podés acceder a la app directamente desde cualquier navegador web:
 
 ### 2. Modo App Instalable (PWA)
 
-Si preferís tener la app instalada en tu celular (como una aplicación nativa), podés hacerlo gracias a la tecnología PWA:
+Si preferís tener la app instalada en tu celular (como una aplicación nativa y usar), podés hacerlo gracias a la tecnología PWA:
 - Accedé a la web desde tu navegador móvil.
 - Buscá la opción "Agregar a la pantalla de inicio" (generalmente aparece en el menú del navegador).
-- ¡Listo! Ahora tendrás acceso directo como si fuera una app instalada.
+- ¡Listo! Ahora tendrás el icono de la app. acceso directo como si fuera una app instalada, y podras usar la simulación y correlaciones aún sin internet!
 
 **Ventajas del modo PWA:**  
 - Acceso offline a funciones básicas.
