@@ -459,6 +459,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 <body>
   <!-- Datos meteorológicos actualizados -->
@@ -555,7 +556,7 @@
   <script>
     // ===== CÓDIGO METEOROLÓGICO ACTUALIZADO =====
     const stationId = "IINGEN39";
-    const apiKeyWunderground = "6532d6454b8aa370768e63d6ba5a832e";
+    const apiKeyWunderground = window.WUNDERGROUND_API_KEY;
     const updateInterval = 5 * 60 * 1000; // 5 minutos
 
     // Elementos DOM

@@ -47,5 +47,19 @@ Desarrollado por Guardianes Arroyos y la comunidad.
 
 ---
 
-¿Tenés dudas o sugerencias?  
-Contactanos por [Instagram](https://www.instagram.com/guardianesarroyos/) o [Email](mailto:guardianesarroyos@gmail.com).
+## Configuración de la API Key de Wunderground
+
+Por motivos de seguridad, la clave de API de Wunderground **no está incluida en este repositorio**.
+
+Para que la aplicación funcione correctamente en tu entorno local, debes crear un archivo llamado `config.local.js` en la raíz del proyecto con el siguiente contenido:
+
+```js
+window.WU_API_KEY = "TU_API_KEY_AQUI";
+```
+
+> **Importante:**  
+> Este archivo está en `.gitignore` y **no debe subirse al repositorio**.
+
+Si no tienes una clave, solicita acceso al administrador del proyecto.
+
+---
