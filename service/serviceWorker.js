@@ -3,7 +3,13 @@ self.addEventListener('install', event => {
     caches.open('v1').then(cache => {
       return cache.addAll([
         './',
-        './index.html'
+        './index.html',
+        './style/main.css',
+        './script/app.js',
+        './config/config.js',
+        './manifest.json',
+        './assets/icons/icon-192.png',
+        './assets/icons/icon-512.png'
       ]);
     })
   );

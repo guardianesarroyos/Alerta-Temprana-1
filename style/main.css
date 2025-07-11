@@ -1,0 +1,444 @@
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+    }
+
+    /* Estilos meteorológicos actualizados */
+    .datos-meteo {
+      position: fixed;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 0 0 5px 5px;
+      z-index: 100;
+      color: #00d4ff;
+      display: flex;
+      flex-direction: column;
+    }
+    #lluvia {
+      top: 0;
+      left: 0;
+      align-items: flex-start;
+    }
+    #temperatura {
+      top: 0;
+      right: 0;
+      align-items: flex-end;
+    }
+    .meteo-valor {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .meteo-detalle {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1rem;
+      margin-top: 3.5rem;
+    }
+
+    .header h1, .header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .selector-container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      margin-left: 4px;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .info-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .info-buttons button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+    }
+
+    .slider-container {
+      width: calc(100% - 80px);
+      margin-top: 1.5rem;
+      padding: 0.8rem 0;
+      background-color: rgba(51, 51, 51, 0.3);
+      border-radius: 8px;
+    }
+
+    #rain {
+      width: 100%;
+      height: 24px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #333;
+      outline: none;
+      border-radius: 12px;
+      padding: 0;
+      margin: 15px 0;
+    }
+
+    #rain::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00bfff;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    #rain::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00bfff;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    #rainValue {
+      display: inline-block;
+      min-width: 40px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #00bfff;
+      background-color: rgba(0, 191, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+
+    .factors-container {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1.2rem 0;
+      width: calc(100% - 80px);
+    }
+
+    .factor-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .factor-toggle input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .factor-toggle .toggle-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.8rem;
+      border-radius: 20px;
+      background-color: #333;
+      color: #aaa;
+      border: 2px solid #444;
+      font-size: 0.85rem;
+      min-width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .factor-toggle input:checked + .toggle-button {
+      background-color: #ff9800;
+      color: #121212;
+      border-color: #ff9800;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
+    }
+
+    .factor-toggle .tooltip {
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      background-color: #ff9800;
+      color: #121212;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    .factor-toggle .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    .factor-toggle:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .level-bar {
+      position: fixed;
+      right: 10px;
+      top: 10%;
+      height: 80vh;
+      width: 60px;
+      background-color: rgba(51, 51, 51, 0.6);
+      border-radius: 10px;
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .level-fill {
+      width: 100%;
+      background-color: #00bfff;
+      transition: height 0.3s ease;
+      position: absolute;
+      bottom: 0;
+      z-index: 1;
+    }
+
+    .marks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .mark {
+      width: 100%;
+      text-align: center;
+      font-size: 0.7rem;
+      border-top: 1px solid #aaa;
+      height: calc(100% / 29);
+      box-sizing: border-box;
+      color: #fff;
+      background: transparent;
+    }
+
+    .impact-container {
+      width: calc(100% - 80px);
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border: 2px solid #00bfff;
+      border-radius: 12px;
+      background-color: rgba(0, 191, 255, 0.15);
+      box-shadow: 0 0 8px #00bfff88;
+      color: #a0eaff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px #00bfffaa;
+      user-select: none;
+    }
+
+    .impact-container p {
+      margin: 0.3rem 0;
+    }
+
+    .mi-casa-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #ff9800;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .mi-casa-label {
+      position: absolute;
+      right: 100%;
+      margin-right: 4px;
+      font-size: 0.8rem;
+      color: #ff9800;
+      pointer-events: none;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .frase-ambiental-container {
+      width: calc(100% - 80px);
+      margin: 1rem 0 0.5rem 0;
+      padding: 8px 12px;
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+      font-style: italic;
+      font-weight: normal;
+      color: #FF6D00;
+      background-color: rgba(255, 109, 0, 0.08);
+      border-radius: 6px;
+      font-size: 0.85em;
+      border-left: 3px solid rgba(255, 109, 0, 0.3);
+      opacity: 0.9;
+    }
+
+    .footer {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #aaa;
+      width: calc(100% - 80px);
+      text-align: center;
+    }
+
+    .mi-casa-container {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      width: calc(100% - 80px);
+    }
+
+    .mi-casa-container input {
+      width: 80px;
+      padding: 4px;
+      border-radius: 4px;
+      border: none;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    .mi-casa-container button {
+      padding: 5px 8px;
+      background: #ff9800;
+      border: none;
+      border-radius: 4px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .slider-container, .factors-container, .impact-container, .footer, .frase-ambiental-container {
+        width: calc(90% - 60px);
+      }
+
+      .impact-container {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+      }
+
+      .level-bar {
+        width: 50px;
+      }
+
+      .mark {
+        font-size: 0.6rem;
+        height: calc(100% / 29);
+      }
+
+      .frase-ambiental-container {
+        font-size: 0.8em;
+        padding: 6px 10px;
+      }
+
+      #rain {
+        height: 20px;
+      }
+      
+      #rain::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+      }
+      
+      #rainValue {
+        font-size: 1rem;
+      }
+
+      .factor-toggle .toggle-button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-width: 80px;
+      }
+
+      .datos-meteo {
+        font-size: 0.8rem;
+      }
+      .meteo-valor {
+        font-size: 1rem;
+      }
+    }
